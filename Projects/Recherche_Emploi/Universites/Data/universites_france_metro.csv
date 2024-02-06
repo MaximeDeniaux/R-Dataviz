@@ -1,0 +1,49 @@
+nom_universite;url_recrutement;remarques;class 
+Aix-Marseille Université;https://recrutement.univ-amu.fr/;;Offre  : job__title, lien dans le <a> href, titre dans le <span>
+Université de Picardie Jules Verne;https://u-picardie.nous-recrutons.fr/offres-emploi/;;Offre : data-post-id, lien dans la class jet-engine-listing-overlay-link, titre dans le jet-listing-dynamic-field__content
+Université d'Angers;https://recrutement.univ-angers.fr/offres-emploi/;bouton afficher plus d’offres;Offre : data-post-id, lien dans la class jet-engine-listing-overlay-link, titre dans le jet-listing-dynamic-field__content
+Université d'Artois;https://careers.flatchr.io/fr/company/universitedartois/?source=3424;;Offre : title-offers, lien dans le href du <a>, titre dans le <a>
+Avignon Université;https://recrutement.univ-avignon.fr/;;Offre : job-card-container, lien dans href de stretched-link, titre dans stretched-link
+Université de Technologie de Belfort-Montbéliard;https://www.utbm.fr/utbm/emploi-a-lutbm/#contractuels;;manuellement
+Université de Franche-Comté;https://univ-fcomte.nous-recrutons.fr/offres-emploi/;;Offre : data-post-id, lien dans le href jet-engine-listing-overlay-link,  titre dans le jet-listing-dynamic-field__content
+Université de Bordeaux;https://www.u-bordeaux.fr/universite/travailler-a-l-universite/offres-demploi?type=pers;;Offre : job-offer-data, lien dans href de delegate-hover, titre dans card-item-title job-offer-title
+Université de Bretagne Occidentale;https://ubo.nous-recrutons.fr/offres-emploi/;;Offre : data-post-id, lien dans le href jet-engine-listing-overlay-link , titre dans jet-listing-dynamic-field__content
+Université de Bretagne Sud;https://univ-ubs.nous-recrutons.fr/offres-demploi-administratif-et-technique/;;Offre dans data-post-id , lien dans le href jet-engine-listing-overlay-link, titre dans jet-listing-dynamic-field__content
+Université de Caen Normandie;https://recrutement-unicaen.nous-recrutons.fr/offres-emploi/;boutons plusieurs pages mais meme url;Offre dans data-post-id , lien dans le href jet-engine-listing-overlay-link, titre dans le elementor-heading-title elementor-size-default en <h3>
+Université Savoie Mont Blanc;https://univ-smb.nous-recrutons.fr/nos-offres-demploi-administratifs/;bouton afficher plus d’offres;Offre dans data-post-id, lien dans le href de jet-engine-listing-overlay-link, titre dans jet-listing-dynamic-field__content
+Université Clermont Auvergne;https://www.uca.fr/universite/travailler-a-luca/personnels-administratifs-et-techniques/offres-demplois-offres-de-recrutement-dagents-titulaires-et-contractuels-95;;manuellement
+Université de Technologie de Compiègne;https://www.utc.fr/recrutement/;;manuellement
+Université de Bourgogne;https://ube.nous-recrutons.fr/offres-emploi/;boutons plusieurs pages mais meme url;Offre dans data-post-id, lien dans href de jet-engine-listing-overlay-link, titre dans <h3> de elementor-heading-title elementor-size-default
+Grenoble INP – UGA;https://grenoble-inp.nous-recrutons.fr/offres-emploi/;bouton afficher plus d’offres;Offre dans data-post-id, lien dans href de jet-engine-listing-overlay-link, titre dans jet-listing-dynamic-field__content
+La Rochelle Université;https://www.univ-larochelle.fr/luniversite/recrutement/personnels-enseignants-et-recherche/;;Offre dans child__infos, lien dans href du <a> de child__infos , titre dans le <a> de child__infos
+Université Le Havre Normandie;https://www.univ-lehavre.fr/fr/universite/travailler-a-luniversite/luniversite-recrute/;bouton dépliant ‘recrutement personne ladministratif et technique’;manuellement
+Le Mans Université;https://emploi.univ-lemans.fr/offres-demploi-dans-les-metiers-administratifs-ou-techniques/;;Offre dans data-post-id, lien dans href de jet-engine-listing-overlay-link, titre dans <a> de jet-engine-listing-overlay-link
+Université de Lille;https://univ-lille.nous-recrutons.fr/offres-emploi/;bouton afficher plus d’offres;Offre dans data-post-id, lien dans href de jet-engine-listing-overlay-link, titre dans <a> de  jet-listing-dynamic-field__content
+Université de Limoges;https://www.unilim.fr/recrutement/recrutement-biatss/;;manuellement
+Université du Littoral Côte d'Opale;https://recrutement.univ-littoral.fr/;bouton charger plus d’offres;Offre si il y a un data-custom-edit-handle, lien dans le href du <a> du elementor-heading-title elementor-size-default, titre dans le <a> du elementor-heading-title elementor-size-default
+Université de Lorraine;https://univ-lorraine.nous-recrutons.fr/offres-emploi/;bouton afficher plus d’offres;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université Claude Bernard Lyon 1;https://recrutement.univ-lyon1.fr/offres-emploi/;bouton afficher plus d’offres;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université Lumière Lyon 2;https://univ-lyon2.nous-recrutons.fr/offres-emploi/;bouton afficher plus d’offres;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université Jean Moulin Lyon 3;https://recrutement.univ-lyon3.fr/offres-emploi/;bouton afficher plus d’offres;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université de Montpellier;https://umontpellier.nous-recrutons.fr/offres-emploi/;boutons plusieurs pages mais meme url;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université Paul-Valéry Montpellier 3;https://www.univ-montp3.fr/fr/offres-emplois/upvm;;manuellement
+Université de Haute-Alsace;https://www.uha.fr/fr/uha-1/recrutements/personnels-administratifs-et-techniques/offres-d-emplois.html;;manuellement
+Nantes Université;https://univ-nantes.nous-recrutons.fr/offres-emploi/;boutons plusieurs pages mais meme url;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université Côte d'Azur;https://univ-cotedazur.fr/universite/travailler-a-universite-cote-d-azur/offres-demplois/personnels-administratifs-techniques-et-bibliotheques;;Offre dans objets offresstagesemplois offresstagesemplois—type-0001, lien dans href du <a> de objets offresstagesemplois offresstagesemplois—type-0001, titre dans <a> de objets offresstagesemplois offresstagesemplois—type-0001
+Université de Nîmes;https://www.unimes.fr/fr/universite/recrutement/biatss.html;;Offre dans les <td> de la <table> de la class simple
+Université d'Orléans;https://www.univ-orleans.fr/fr/univ/universite/travailler-luniversite/personnels-administratifs-et-techniques/offres-demploi;;manuellement
+Université de Pau et des Pays de l'Adour;https://recrutement-administratif.univ-pau.fr/;;manuellement
+Université de Perpignan Via Domitia;https://recrutement.upvd.fr/offres-emploi/;;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université de Poitiers;https://univ-poitiers.nous-recrutons.fr/offres-emploi/;;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université de Reims Champagne-Ardenne;https://univ-reims.nous-recrutons.fr/nos-offres-demploi/;bouton afficher plus d’offres;Offre dans chaque <li>< de job_listings, lien dans href de chaque <a> de <li>, titre dans le <h3> de ‘position’
+Université de Rennes;https://univ-rennes.nous-recrutons.fr/nos-offres-demploi/;bouton afficher plus d’offres;Offre dans chaque <li>< de job_listings, lien dans href de chaque <a> de <li>, titre dans le <h3> de ‘position’
+Université de Rouen Normandie;https://nousrejoindre.univ-rouen.fr/offres-demploi/page/1;changer fin de l’url pour la numeoration de page;Offre dans striped-item—wrapper, lien dans href du <a> de card-title pb-2 mb-2 fw-semibold , titre dans <a> de card-title pb-2 mb-2 fw-semibold
+Université Jean Monnet Saint-Étienne;https://emploi.univ-st-etienne.fr/offres-emploi/;;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université de Strasbourg;https://www.unistra.fr/fr/universite/recrutement/les-offres-demploi?page=0;changer fin de l’url pour la numeoration de page;Offre dans le card__inner text-1 font-bold my-2 overflow-visible, lien dans le href de fully-clickable text-link text-link--large text-link--reverse static, titre entre guillemets dans dans caption-1 font-normal 
+Université de Toulon;https://univ-tln.nous-recrutons.fr/offre-demploi/;;manuellement
+Toulouse INP;https://toulouse-inp.nous-recrutons.fr/offres-emploi/;;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université Toulouse 1 Capitole;https://www.ut-capitole.fr/accueil/universite/ut-capitole-recrute/ut-capitole-recrute;liste deroulannte « contractuels »;manuellement
+Université Toulouse Jean Jaurès;https://www.univ-tlse2.fr/accueil/recrutement/emplois-biatss/biatss-titulaires;dans « contractuels »;manuellement
+Université Toulouse III Paul Sabatier;https://www.univ-tlse3.fr/personnels-administratifs-et-techniques/postes-ouverts-aux-contractuels-et-aux-titulaires-detachement-mutation-voie-contractuelle;liste deroulante « postes de catégorie A »;manuellement
+Université de Tours;https://univ-tours.nous-recrutons.fr/offres-non-enseignants/;bouton afficher plus d’offres;Offre dans le data-post-id, lien dans le href du jet-engine-listing-overlay-link, titre dans <a>  de  jet-engine-listing-overlay-link
+Université de Technologie de Troyes;https://www.utt.fr/carrieres-emplois/poste-administratif-ou-technique;;manuellement

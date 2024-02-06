@@ -1,0 +1,69 @@
+United Cup;Team Event;Brisbane-Perth-Sydney, Australia;29/12/2022;08/01/2023;Indoor Hard;$15,000,000
+Adelaide International 1;ATP 250;Adelaide, Australia;01/01/2023;08/01/2023;Outdoor Hard;$642,735
+Tata Open Maharashtra;ATP 250;Pune, India;02/01/2023;07/01/2023;Outdoor Hard;$713,495
+ASB Classic;ATP 250;Auckland, New Zealand;09/01/2023;14/01/2023;Outdoor Hard;$713,495
+Adelaide International 2;ATP 250;Adelaide, Australia;09/01/2023;14/01/2023;Outdoor Hard;$642,735
+Australian Open;Grand Slam;Melbourne, Australia;16/01/2023;29/01/2023;Outdoor Hard;$822,175.00
+Davis Cup Qualifier;Davis Cup;Multiple Locations;02/02/2023;05/02/2023;Indoor;
+Dallas Open;ATP 250;Dallas, TX, U.S.A.;06/02/2023;12/02/2023;Indoor Hard;$34,848,000
+Cordoba Open;ATP 250;Cordoba, Argentina;06/02/2023;12/02/2023;Outdoor Clay;$713,495
+Open Sud de France – Montpellier;ATP 250;Montpellier, France;06/02/2023;12/02/2023;Indoor Hard;$630,705
+ABN AMRO Open;ATP 500;Rotterdam, Netherlands;13/02/2023;19/02/2023;Indoor Hard;$2,224,460
+Delray Beach Open;ATP 250;Delray Beach, FL, U.S.A.;13/02/2023;19/02/2023;Outdoor Hard;$718,245
+Argentina Open;ATP 250;Buenos Aires, Argentina;13/02/2023;19/02/2023;Outdoor Clay;$711,600
+Rio Open;ATP 500;Rio de Janeiro, Brazil;20/02/2023;26/02/2023;Outdoor Clay;$2,178,980
+Qatar ExxonMobil Open;ATP 250;Doha, Qatar;20/02/2023;26/02/2023;Outdoor Hard;$1,485,775
+Open 13 Provence;ATP 250;Marseille, France;20/02/2023;26/02/2023;Indoor Hard;$784,830
+Dubai;ATP 500;Dubai, U.A.E.;27/02/2023;05/03/2023;Outdoor Hard;$3,020,535
+Abierto Mexicano Telcel;ATP 500;Acapulco, Mexico;27/02/2023;05/03/2023;Outdoor Hard;$2,178,980
+Chile Open;ATP 250;Santiago, Chile;27/02/2023;05/03/2023;Outdoor Clay;$718,245
+BNP Paribas Open;Masters 1000;Indian Wells, CA, U.S.A.;08/03/2023;19/03/2023;Outdoor Hard;$10,143,750
+Miami Open;Masters 1000;Miami, FL, U.S.A.;22/03/2023;02/04/2023;Outdoor Hard;$10,155,105
+Fayez Sarofim & Co. U.S. Men's Clay Court Championship;ATP 250;Houston, TX, U.S.A.;03/04/2023;09/04/2023;Outdoor Clay;$718,245
+Grand Prix Hassan II;ATP 250;Marrakech, Morocco;03/04/2023;09/04/2023;Outdoor Clay;$630,705
+Millennium Estoril Open;ATP 250;Estoril, Portugal;03/04/2023;09/04/2023;Outdoor Clay;$630,705
+Rolex Monte-Carlo Masters;Masters 1000;Monte Carlo, Monaco;09/04/2023;16/04/2023;Outdoor Clay;$6,228,295
+Barcelona Open;ATP 500;Barcelona, Spain;17/04/2023;23/04/2023;Outdoor Clay;$2,872,435
+Banja Luka Open;ATP 250;Banja Luka, Bosnia & Herzegovina;17/04/2023;23/04/2023;Outdoor Clay;$630,705
+BMW Open by American Express;ATP 250;Munich, Germany;17/04/2023;23/04/2023;Outdoor Clay;$630,705
+Mutua Madrid Open;Masters 1000;Madrid, Spain;26/04/2023;07/05/2023;Outdoor Clay;$8,796,536
+Internazionali BNL d'Italia;Masters 1000;Rome, Italy;10/05/2023;21/05/2023;Outdoor Clay;$8,637,966
+Gonet Geneva Open;ATP 250;Geneva, Switzerland;21/05/2023;27/05/2023;Outdoor Clay;$630,705
+Open Parc Auvergne-Rhone-Alpes Lyon;ATP 250;Lyon, France;21/05/2023;27/05/2023;Outdoor Clay;$630,705
+Roland Garros;Grand Slam;Paris, France;28/05/2023;11/06/2023;Outdoor Clay;€43,900,000
+BOSS OPEN;ATP 250;Stuttgart, Germany;12/06/2023;18/06/2023;Outdoor Grass;$795,730
+Libema Open;ATP 250;s-Hertogenbosch, Netherlands;12/06/2023;18/06/2023;Outdoor Grass;$750,950
+Cinch Championships;ATP 500;London, Great Britain;19/06/2023;25/06/2023;Outdoor Grass;$2,345,130
+Terra Wortmann Open;ATP 500;Halle, Germany;19/06/2023;25/06/2023;Outdoor Grass;$2,345,130
+Mallorca Championships;ATP 250;Mallorca, Spain;25/06/2023;01/07/2023;Outdoor Grass;$984,805
+Rothesay International;ATP 250;Eastbourne, Great Britain;26/06/2023;01/07/2023;Outdoor Grass;$791,545
+Wimbledon;Grand Slam;London, Great Britain;03/07/2023;16/07/2023;Outdoor Grass;£44,700,000
+Infosys Hall of Fame Open;ATP 250;Newport, RI, U.S.A.;17/07/2023;23/07/2023;Outdoor Grass;$718,245
+EFG Swiss Open Gstaad;ATP 250;Gstaad, Switzerland;17/07/2023;23/07/2023;Outdoor Clay;$630,705
+Nordea Open;ATP 250;Bastad, Sweden;17/07/2023;23/07/2023;Outdoor Clay;$630,705
+Hamburg European Open;ATP 500;Hamburg, Germany;24/07/2023;30/07/2023;Outdoor Clay;$1,981,470
+Truist Atlanta Open presented by Fiserv;ATP 250;Atlanta, GA, U.S.A.;24/07/2023;30/07/2023;Outdoor Hard;$822,715
+Open Umag;ATP 250;Umag, Croatia;24/07/2023;30/07/2023;Outdoor Clay;$630,705
+Citi Open;ATP 500;Washington, DC, U.S.A.;31/07/2023;06/08/2023;Outdoor Hard;$2,178,980
+Abierto de Tenis Mifel;ATP 250;Los Cabos, Mexico;31/07/2023;05/08/2023;Outdoor Hard;$946,975
+Generali Open;ATP 250;Kitzbuhel, Austria;31/07/2023;05/08/2023;Outdoor Clay;$630,705
+National Bank Open;Masters 1000;Toronto, Canada;07/08/2023;13/08/2023;Outdoor Hard;$7,622,925
+Western & Southern Open;Masters 1000;Cincinnati, OH, U.S.A.;13/08/2023;20/08/2023;Outdoor Hard;$7,665,215
+Winston-Salem Open;ATP 250;Winston-Salem, NC, U.S.A.;20/08/2023;26/08/2023;Outdoor Hard;$850,680
+US Open;Grand Slam;New York, NY, U.S.A.;28/08/2023;10/09/2023;Outdoor Hard;$65,000,020
+Chengdu Open;ATP 250;Chengdu, China;20/09/2023;26/09/2023;Outdoor Hard;$1,261,555
+Zhuhai Championships;ATP 250;Zhuhai, China;20/09/2023;26/09/2023;Outdoor Hard;$1,057,295
+Laver Cup;Team Event;Vancouver, Canada;22/09/2023;24/09/2023;Indoor Hard;
+Astana Open;ATP 250;Astana, Kazakhstan;27/09/2023;03/10/2023;Indoor Hard;$1,093,360
+China Open;ATP 500;Beijing, China;28/09/2023;04/10/2023;Outdoor Hard;$3,798,915
+Rolex Shanghai Masters;Masters 1000;Shanghai, China;04/10/2023;15/10/2023;Outdoor Hard;$10,046,270
+Japan Open;ATP 500;Tokyo, Japan;16/10/2023;22/10/2023;Outdoor Hard;$2,178,980
+European Open;ATP 250;Antwerp, Belgium;16/10/2023;22/10/2023;Indoor Hard;$750,950
+Stockholm Open;ATP 250;Stockholm, Sweden;05/11/2023;11/11/2023;Indoor Hard;$750,950
+Erste Bank Open;ATP 500;Vienna, Austria;23/10/2023;29/10/2023;Indoor Hard;$2,559,790
+Swiss Indoors Basel;ATP 500;Basel, Switzerland;23/10/2023;29/10/2023;Indoor Hard;$2,345,955
+Rolex Paris Masters;Masters 1000;Paris, France;30/10/2023;05/11/2023;Indoor Hard;$6,748,815
+Sofia Open;ATP 250;Sofia, Bulgaria;4/11/2023;11/11/2023;Indoor Hard;€562,815
+Moselle Open;ATP 250;Metz, France;05/11/2023;11/11/2023;Indoor Hard;$630,705
+Next Gen ATP Finals;Season End;TBD, TBD;12/11/2023;19/11/2023;Indoor Hard;$2,000,000
+Nitto ATP Finals;Season End;Turin, Italy;12/11/2023;19/11/2023;Indoor Hard;
