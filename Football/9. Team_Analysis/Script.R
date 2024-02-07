@@ -515,7 +515,7 @@ Plot_2 <- ggplot(data) +
 
 # Legend (gradient)
 
-Legend = as_ggplot(ggpubr::get_legend(ggplot(data) + 
+Legend <-  as_ggplot(ggpubr::get_legend(ggplot(data) + 
 														            # Segments
 																				geom_segment(aes(x     = Joined, 
 																												 xend  = End_Contract, 
@@ -574,7 +574,7 @@ Legend = as_ggplot(ggpubr::get_legend(ggplot(data) +
 
 # Caption 
 
-Caption = ggplot(data.frame(x = 1, y = 1)) + 
+Caption <-  ggplot(data.frame(x = 1, y = 1)) + 
 							theme_void() +
 							labs(title = "Visualisation by DENIAUX Maxime | Data : Transfermarkt") +
 							theme(panel.background      = element_rect(fill  = "#18202D", 
@@ -593,7 +593,7 @@ Caption = ggplot(data.frame(x = 1, y = 1)) +
 
 # Title
 
-Title = ggplot(data.frame(x = 1, y = 1)) + 
+Title <-  ggplot(data.frame(x = 1, y = 1)) + 
 						theme_void() +
 						labs(title    = "Marseille, a workforce victim of too much renewal ?",
 								 subtitle = "Under the leadership of its multifaceted president, Pablo Longoria, Marseille renewed a large part of its workforce during the last offseason <br> (as in each of them since his arrival at Marseille 3 and a half years ago). A choice criticized by observers explaining that it is more difficult <br> to create a gaming identity with too many new players. Perhaps rightly so given the results of the current season (8th at mid-season). <br> <span style='color:#F0E362'>The transfer window of too many ?</span>") +
@@ -642,7 +642,6 @@ ggsave(plot = plot_grid(Title,
 			 device   = 'png', 
 			 bg       = "#18202D"
 			 )
-
 
 
 
