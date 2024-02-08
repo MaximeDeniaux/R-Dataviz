@@ -1,0 +1,21 @@
+Year;Australian_Open;French_Open;Wimbledon;US_Open
+2004;Federer;Gaudio;Federer;Federer
+2005;Safin;Nadal;Federer;Federer
+2006;Federer;Nadal;Federer;Federer
+2007;Federer;Nadal;Federer;Federer
+2008;Djokovic;Nadal;Nadal;Federer
+2009;Nadal;Federer;Federer;Del Potro
+2010;Federer;Nadal;Nadal;Nadal
+2011;Djokovic;Nadal;Djokovic;Djokovic
+2012;Djokovic;Nadal;Federer;Murray
+2013;Djokovic;Nadal;Murray;Nadal
+2014;Wawrinka;Nadal;Djokovic;Cilic
+2015;Djokovic;Wawrinka;Djokovic;Djokovic
+2016;Djokovic;Djokovic;Murray;Wawrinka
+2017;Federer;Nadal;Federer;Nadal
+2018;Federer;Nadal;Djokovic;Djokovic
+2019;Djokovic;Nadal;Djokovic;Nadal
+2020;Djokovic;Nadal;;Thiem
+2021;Djokovic;Djokovic;Djokovic;Medvedev
+2022;Nadal;Nadal;Djokovic;Alcaraz
+2023;Djokovic;;;
