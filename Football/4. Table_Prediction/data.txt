@@ -1,0 +1,7 @@
+HomeTeam;AwayTeam;A;D;H;Round;To_Play
+Lorient;Lille;0.231;0.183;0.586;4;Yes
+Nice;Lyon;0.752;0.146;0.102;4;No
+Nantes;Marseille;0.04;0.09;0.87;4;No
+Brest;Rennes;0.4921;0.2783;0.2296;4;No
+Monaco;Lens;0.2736;0.2423;0.4841;4;Yes
+Toulouse;Clermont;0.3169;0.2747;0.4084;4;Yes
