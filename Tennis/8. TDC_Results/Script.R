@@ -5,9 +5,10 @@
 
 
 library("rvest")
-library("glue")
 library("tidyverse")
 library("gganimate")
+library("ggrepel")
+library("ggtext")
 
 
 
@@ -431,8 +432,8 @@ ggsave(plot     = plot1,
 
 anim_save(filename = "Plot_Animate.gif",
 					animate(plot2, 
-									fps          = 30, 
-									duration     = 45,
+									fps          = 20, 
+									duration     = 40,
 									end_pause    = 5,
 									start_pause  = 5,
 									width        = 1250,
