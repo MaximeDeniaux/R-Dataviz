@@ -12,18 +12,23 @@ library(cowplot)
 
 setwd("C:/Users/maxim/Documents/Site_Web/Git/R-Dataviz/Football/10. Tactical_Systems")
 
+
+
+
 # Data ----
 
 Data_Final <- read_csv("Data.txt")
+
+
 
 # Data processing ----
 
 
 data_barplot1 <-  Data_Final %>% group_by(League,Classification) %>% summarise(n = n())%>% mutate(freq = n / sum(n)) %>% select(-n)
-data_barplot2 <-  data_barplot1 %>% group_by(League) %>% summarise(`total_3_5_d`  = freq[Classification == "3_5d_1s"] + freq[Classification == "3_5d_2s"],
-																																   `total_4_d`    = 1 - (freq[Classification == "3_5d_1s"] + freq[Classification == "3_5d_2s"])
-																																   ) %>% pivot_longer(cols = c(`total_3_5_d`,`total_4_d`),
-																																 									    names_to = "Classification",
+data_barplot2 <-  data_barplot1 %>% group_by(League) %>% summarise(total_3_5_d  = freq[Classification == "3_5d_1s"] + freq[Classification == "3_5d_2s"],
+																																   total_4_d    = 1 - (freq[Classification == "3_5d_1s"] + freq[Classification == "3_5d_2s"])
+																																   ) %>% pivot_longer(cols      = c("total_3_5_d","total_4_d"),
+																																 									    names_to  = "Classification",
 																																 									    values_to = "freq"
 																																   									 )
 
