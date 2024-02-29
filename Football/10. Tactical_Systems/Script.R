@@ -5,6 +5,7 @@
 library(rvest)
 library(tidyverse)
 library(cowplot)
+library(ggtext)
 
 
 
@@ -74,7 +75,7 @@ Plot <- data_barplot %>%
 	                    # Legend annotation
 											annotate('text', x =  4.35,  y = 1.1825, label = "Playing systems typology",  size = 3.8, color = "#7F4A39") +
 											annotate('text', x =  5.45,  y = 1.1825, label = "3_5d  :  3 or 5 defenders", size = 3.4, color = "#56565B") +
-											annotate('text', x =  6.2, y = 1.1825, label = "2s  :  2 strickers",        size = 3.4, color = "#56565B") +  
+											annotate('text', x =  6.2, y = 1.1825, label = "2s  :  2 strikers",        size = 3.4, color = "#56565B") +  
 	                    # Arrow annotation data
 	                    annotate('curve',
 													     x = 0.75, 
