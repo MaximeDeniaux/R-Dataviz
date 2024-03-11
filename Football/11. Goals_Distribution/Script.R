@@ -538,7 +538,7 @@ Caption <-  ggplot(data.frame(x = 1, y = 1)) +
 	            scale_y_continuous(limits = c(0,10)) +
 	            scale_x_continuous(limits = c(0,1)) +
 							theme_void() +
-							labs(caption = "Visualisation by DENIAUX Maxime | Data : Transfermarkt") +
+							labs(caption = "Visualisation by DENIAUX Maxime   |   Data : Transfermarkt   |   Inspiration : Gilbert Fontana [Consumer Confidence] & Getting Blue Fingers [Percentile Radars/Pizza’s]") +
 							theme(panel.background      = element_rect(fill  = "#F4F5F1",
 																												 color = "#F4F5F1"
 																												 ),
@@ -547,7 +547,7 @@ Caption <-  ggplot(data.frame(x = 1, y = 1)) +
 																												 ), 
 										plot.caption          = element_text(hjust  = 0.5, 
 																												 color  = "gray30", 
-																												 size   = 15, 
+																												 size   = 20, 
 																												 margin = margin(0,0,0,0)
 																												 ),
 										plot.margin           = margin(t = 0, b = 20)
