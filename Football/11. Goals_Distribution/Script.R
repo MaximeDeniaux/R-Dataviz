@@ -19,7 +19,6 @@ setwd("C:/Users/maxim/Documents/Site_Web/Git/R-Dataviz/Football/11. Goals_Distri
 # Data ----
 
 
-##  ----
 
 
 years               <- 1995:2020
@@ -572,10 +571,9 @@ ggsave(plot = plot_grid(Title,
 			 filename = "Plot.png",
 			 width    = 35,
 			 height   = 20,
-			 bg       = "#F4F5F1"
-			 )
-
-
+			 bg       = "#F4F5F1",
+			 res = 320)
+			 
 
 
 
