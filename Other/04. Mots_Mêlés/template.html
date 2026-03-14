@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Word Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg-main:#f1f1f1;--bg-card:#ffffff;--accent-primary:#1B3A5C;--accent-secondary:#00794A;--accent-tertiary:#C0392B;--text-primary:#1A2733;--text-secondary:#5A6B7D;--text-muted:#8899AA;--cell-bg:#ffffff;--cell-hover:rgba(27,58,92,0.08);--cell-selected:rgba(27,58,92,0.2);--cell-found:rgba(0,121,74,0.12);--cell-mystery:rgba(192,57,43,0.1);--shadow:0 2px 12px rgba(0,0,0,0.06);--radius:12px;--radius-sm:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Outfit",sans-serif;background:var(--bg-main);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+.app-container{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.header{text-align:center;margin-bottom:2.5rem}
+.header h1{font-family:"Space Mono",monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent-primary);margin-bottom:.5rem}
+.header p{color:var(--text-secondary);font-size:1rem;font-weight:300;letter-spacing:.05em}
+.settings-panel{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:end;margin-bottom:2rem;padding:1.5rem;background:var(--bg-card);border-radius:var(--radius);border:1px solid rgba(27,58,92,0.1);box-shadow:var(--shadow)}
+.setting-group{display:flex;flex-direction:column;gap:.4rem}
+.setting-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary)}
+.setting-group select{font-family:"Outfit",sans-serif;font-size:.95rem;font-weight:500;padding:.6rem 1rem;background:var(--bg-main);color:var(--text-primary);border:1px solid rgba(27,58,92,0.15);border-radius:var(--radius-sm);cursor:pointer;transition:border-color .2s;min-width:140px}
+.setting-group select:hover{border-color:var(--accent-primary)}
+.setting-group select:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(27,58,92,0.1)}
+.btn-generate{font-family:"Outfit",sans-serif;font-size:1rem;font-weight:700;padding:.65rem 2rem;background:var(--accent-primary);color:#ffffff;border:none;border-radius:var(--radius-sm);cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 15px rgba(27,58,92,0.2)}
+.btn-generate:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,58,92,0.3)}
+.btn-generate:active{transform:translateY(0)}
+.game-area{display:none;gap:2rem;grid-template-columns:1fr 300px;align-items:start}
+.game-area.active{display:grid}
+@media(max-width:850px){.game-area.active{grid-template-columns:1fr}}
+.grid-wrapper{background:var(--bg-card);border-radius:var(--radius);padding:1.5rem;border:1px solid rgba(27,58,92,0.08);box-shadow:var(--shadow);user-select:none;-webkit-user-select:none}
+.grid-container{display:grid;gap:3px;width:100%;aspect-ratio:1}
+.grid-cell{display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-weight:700;font-size:clamp(.7rem,2.5vw,1.2rem);background:var(--cell-bg);border:1px solid rgba(27,58,92,0.08);border-radius:4px;cursor:pointer;transition:background .15s,transform .1s,color .15s,border-color .15s;color:var(--text-primary);aspect-ratio:1;position:relative}
+.grid-cell:hover{background:var(--cell-hover);border-color:rgba(27,58,92,0.2);transform:scale(1.05);z-index:2}
+.grid-cell.selecting{background:var(--cell-selected);color:var(--accent-primary);border-color:rgba(27,58,92,0.3);transform:scale(1.08);z-index:2}
+.grid-cell.found{background:var(--cell-found);color:var(--accent-secondary);border-color:rgba(0,121,74,0.25)}
+.grid-cell.mystery-reveal{background:var(--cell-mystery);color:var(--accent-tertiary);border-color:rgba(192,57,43,0.25);animation:pulse-mystery 1s ease-in-out infinite alternate}
+@keyframes pulse-mystery{from{box-shadow:0 0 5px rgba(192,57,43,0.15)}to{box-shadow:0 0 15px rgba(192,57,43,0.3)}}
+.sidebar{display:flex;flex-direction:column;gap:1.2rem}
+.panel{background:var(--bg-card);border-radius:var(--radius);padding:1.2rem;border:1px solid rgba(27,58,92,0.08);box-shadow:var(--shadow)}
+.panel.mystery{border-color:rgba(192,57,43,0.15)}
+.panel h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-primary);margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid rgba(27,58,92,0.1)}
+.panel.mystery h3{color:var(--accent-tertiary);border-bottom-color:rgba(192,57,43,0.15)}
+.word-list{display:flex;flex-wrap:wrap;gap:.4rem}
+.word-tag{font-family:"Space Mono",monospace;font-size:.75rem;font-weight:400;padding:.35rem .65rem;background:rgba(27,58,92,0.05);border:1px solid rgba(27,58,92,0.12);border-radius:20px;color:var(--text-primary);transition:all .3s;letter-spacing:.05em}
+.word-tag.found{background:rgba(0,121,74,0.08);border-color:rgba(0,121,74,0.25);color:var(--accent-secondary);text-decoration:line-through}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;font-size:.9rem}
+.stat-label{color:var(--text-secondary)}.stat-value{font-weight:600;color:var(--text-primary)}
+.progress-bar{width:100%;height:6px;background:rgba(27,58,92,0.08);border-radius:3px;margin-top:.8rem;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary));border-radius:3px;transition:width .5s ease;width:0%}
+.mystery-definition{font-size:.9rem;color:var(--text-secondary);font-style:italic;margin-bottom:.8rem;line-height:1.5}
+.mystery-letters{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.8rem}
+.mystery-letter-box{width:32px;height:38px;display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-weight:700;font-size:1rem;background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.15);border-radius:4px;color:var(--text-muted)}
+.mystery-letter-box.revealed{color:var(--accent-tertiary);background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.3)}
+.mystery-input-area{display:flex;gap:.5rem;margin-top:.5rem}
+.mystery-input{flex:1;font-family:"Space Mono",monospace;font-size:.9rem;padding:.5rem .8rem;background:var(--bg-main);color:var(--text-primary);border:1px solid rgba(192,57,43,0.15);border-radius:var(--radius-sm);text-transform:uppercase;letter-spacing:.1em}
+.mystery-input:focus{outline:none;border-color:var(--accent-tertiary);box-shadow:0 0 0 3px rgba(192,57,43,0.1)}
+.btn-check-mystery{font-family:"Outfit",sans-serif;font-size:.85rem;font-weight:700;padding:.5rem 1rem;background:var(--accent-tertiary);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:transform .15s}
+.btn-check-mystery:hover{transform:translateY(-1px)}
+.win-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(241,241,241,0.92);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.win-overlay.active{display:flex}
+.win-card{text-align:center;padding:3rem;background:var(--bg-card);border-radius:var(--radius);border:2px solid var(--accent-primary);box-shadow:0 8px 40px rgba(27,58,92,0.15);max-width:400px;animation:win-pop .5s ease}
+@keyframes win-pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.win-card h2{font-family:"Space Mono",monospace;font-size:2rem;color:var(--accent-primary);margin-bottom:1rem}
+.win-card p{color:var(--text-secondary);margin-bottom:.5rem;font-size:1.1rem}
+.win-card .mystery-answer{font-family:"Space Mono",monospace;font-size:1.8rem;font-weight:700;color:var(--accent-tertiary);margin:1rem 0;letter-spacing:.15em}
+.btn-replay{font-family:"Outfit",sans-serif;font-size:1rem;font-weight:700;padding:.8rem 2.5rem;background:var(--accent-primary);color:#ffffff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:1.5rem;text-transform:uppercase;letter-spacing:.05em;transition:transform .15s}
+.btn-replay:hover{transform:translateY(-2px)}
+.footer{text-align:center;margin-top:3rem;padding:1.5rem;color:var(--text-muted);font-size:.8rem;letter-spacing:.05em}
+.footer a{color:var(--accent-primary);text-decoration:none}
+.instructions{display:none;background:var(--bg-card);border:1px solid rgba(27,58,92,0.1);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:.85rem;color:var(--text-secondary);line-height:1.6;box-shadow:var(--shadow)}
+.instructions.active{display:block}
+.instructions strong{color:var(--accent-primary)}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <h1 id="main-title">Word Search</h1>
+    <p id="subtitle">Find all hidden words and discover the mystery word</p>
+  </div>
+  <div class="settings-panel">
+    <div class="setting-group"><label id="label-lang">Language</label><select id="lang"><option value="fr">Français</option><option value="en" selected>English</option></select></div>
+    <div class="setting-group"><label id="label-size">Size</label><select id="grid-size"><option value="10">10 × 10</option><option value="12" selected>12 × 12</option><option value="15">15 × 15</option></select></div>
+    <div class="setting-group"><label id="label-diff">Difficulty</label><select id="difficulty"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="difficult">Hard</option></select></div>
+    <button class="btn-generate" id="btn-generate">Generate</button>
+  </div>
+  <div class="instructions" id="instructions"></div>
+  <div class="game-area" id="game-area">
+    <div class="grid-wrapper"><div class="grid-container" id="grid"></div></div>
+    <div class="sidebar">
+      <div class="panel"><h3 id="stats-title">Progress</h3><div class="stat-row"><span class="stat-label" id="found-label">Found</span><span class="stat-value" id="stat-found">0 / 0</span></div><div class="stat-row"><span class="stat-label" id="time-label">Time</span><span class="stat-value" id="stat-time">00:00</span></div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
+      <div class="panel"><h3 id="wordlist-title">Words to find</h3><div class="word-list" id="word-list"></div></div>
+      <div class="panel mystery" id="mystery-panel" style="display:none;"><h3 id="mystery-title">Mystery Word</h3><div class="mystery-definition" id="mystery-definition"></div><div class="mystery-letters" id="mystery-letters"></div><div class="mystery-input-area"><input type="text" class="mystery-input" id="mystery-input" placeholder=""><button class="btn-check-mystery" id="btn-check-mystery">OK</button></div></div>
+    </div>
+  </div>
+  <div class="footer"><span id="footer-text">Built with R & JavaScript</span> — <a href="https://sport-with-r.com" target="_blank">sport-with-r.com</a></div>
+</div>
+<div class="win-overlay" id="win-overlay"><div class="win-card"><h2 id="win-title"></h2><p id="win-text"></p><div class="mystery-answer" id="win-mystery-word"></div><p id="win-time-text"></p><button class="btn-replay" id="btn-replay">Rejouer</button></div></div>
+<script>
+// ===================== DICTIONNAIRE =====================
+var DICT = %%DICT_JSON%%;
+
+
+// ===================== TRADUCTIONS =====================
+var T = {
+  fr: {
+    title: "Mots Mêlés",
+    subtitle: "Trouvez tous les mots cachés et découvrez le mot mystère",
+    generate: "Générer",
+    instructions: 'Cliquez sur la <strong>première lettre</strong> d\u2019un mot, puis sur la <strong>dernière lettre</strong> pour le sélectionner. Les mots peuvent être cachés horizontalement, verticalement ou en diagonale, dans les deux sens selon la difficulté.',
+    found: "Trouvés", time: "Temps", progress: "Progression",
+    wordsToFind: "Mots à trouver", mystery: "Mot Mystère",
+    mysteryPlaceholder: "Votre réponse...",
+    winTitle: "\uD83C\uDFC6 Bravo !", winText: "Tous les mots trouvés + le mot mystère !",
+    winTime: "Temps : ", replay: "Rejouer",
+    wrong: "Ce n\u2019est pas le bon mot, essayez encore !",
+    facile: "Facile", moyen: "Moyen", difficile: "Difficile",
+    lang: "Langue", size: "Taille", difficulty: "Difficulté",
+    footer: "Créé avec R & JavaScript"
+  },
+  en: {
+    title: "Word Search",
+    subtitle: "Find all hidden words and discover the mystery word",
+    generate: "Generate",
+    instructions: 'Click on the <strong>first letter</strong> of a word, then on the <strong>last letter</strong> to select it. Words can be hidden horizontally, vertically or diagonally, in both directions depending on difficulty.',
+    found: "Found", time: "Time", progress: "Progress",
+    wordsToFind: "Words to find", mystery: "Mystery Word",
+    mysteryPlaceholder: "Your answer...",
+    winTitle: "\uD83C\uDFC6 Well done!", winText: "All words found + the mystery word!",
+    winTime: "Time: ", replay: "Play again",
+    wrong: "Not the right word, try again!",
+    facile: "Easy", moyen: "Medium", difficile: "Hard",
+    lang: "Language", size: "Size", difficulty: "Difficulty",
+    footer: "Built with R & JavaScript"
+  }
+};
+
+// ===================== ETAT DU JEU =====================
+var GS = null, timer = null, t0 = null;
+var sel = {active: false, r1: null, c1: null};
+
+// ===================== DIRECTIONS =====================
+function dirs(d) {
+  if (d === "easy") return [[0,1],[1,0]];
+  if (d === "medium") return [[0,1],[1,0],[1,1],[1,-1]];
+  return [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+}
+
+// ===================== UTILITAIRES =====================
+function shuffle(a) {
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function randLetter() {
+  return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
+}
+
+// ===================== PLACEMENT =====================
+function placeWord(grid, word, size, directions) {
+  var sd = shuffle(directions.slice());
+  for (var att = 0; att < 200; att++) {
+    var dir = sd[att % sd.length];
+    var dr = dir[0], dc = dir[1];
+    var mr = dr >= 0 ? 0 : word.length - 1;
+    var Mr = dr <= 0 ? size - 1 : size - word.length;
+    var mc = dc >= 0 ? 0 : word.length - 1;
+    var Mc = dc <= 0 ? size - 1 : size - word.length;
+    if (mr > Mr || mc > Mc) continue;
+    var r0 = mr + Math.floor(Math.random() * (Mr - mr + 1));
+    var c0 = mc + Math.floor(Math.random() * (Mc - mc + 1));
+    var ok = true, pos = [];
+    for (var i = 0; i < word.length; i++) {
+      var nr = r0 + dr * i, nc = c0 + dc * i;
+      if (nr < 0 || nr >= size || nc < 0 || nc >= size) { ok = false; break; }
+      if (grid[nr][nc] !== null && grid[nr][nc] !== word[i]) { ok = false; break; }
+      pos.push([nr, nc]);
+    }
+    if (ok) {
+      for (var i = 0; i < pos.length; i++) grid[pos[i][0]][pos[i][1]] = word[i];
+      return pos;
+    }
+  }
+  return null;
+}
+
+// ===================== GENERATION GRILLE =====================
+// Règles :
+// 1. Chaque mot placé doit avoir AU MOINS 1 lettre qui n'appartient à aucun autre mot
+// 2. Après placement, il doit rester EXACTEMENT mystLen cases vides (zéro lettre parasite)
+// 3. Les cases vides reçoivent les lettres du mot mystère
+// 4. Toutes les autres cases sont couvertes par des mots de la liste
+
+function makeGrid(size, words, mystObj, diff) {
+  var d = dirs(diff);
+  var total = size * size;
+  var mystLen = mystObj.mot.length;
+  var target = total - mystLen; // exact number of cells that must be occupied
+
+  for (var attempt = 0; attempt < 100; attempt++) {
+    var grid = [];
+    for (var r = 0; r < size; r++) {
+      grid[r] = [];
+      for (var c = 0; c < size; c++) grid[r][c] = null;
+    }
+    var placed = [], wpos = {};
+    // Track how many words use each cell (for the "at least 1 unique letter" rule)
+    var cellWordCount = {};
+    var occCount = 0;
+
+    // Build candidates with balanced length distribution
+    // Interleave short (3-5), medium (6-7), and long (8+) words for variety
+    var eligible = words.filter(function(w) { return w.length <= size; });
+    var shortW = shuffle(eligible.filter(function(w) { return w.length <= 5; }).slice());
+    var medW = shuffle(eligible.filter(function(w) { return w.length >= 6 && w.length <= 7; }).slice());
+    var longW = shuffle(eligible.filter(function(w) { return w.length >= 8; }).slice());
+    // Interleave: take from each bucket in round-robin
+    var cands = [];
+    var maxLen = Math.max(shortW.length, medW.length, longW.length);
+    for (var ii = 0; ii < maxLen; ii++) {
+      if (ii < medW.length) cands.push(medW[ii]);
+      if (ii < shortW.length) cands.push(shortW[ii]);
+      if (ii < longW.length) cands.push(longW[ii]);
+    }
+
+    for (var wi = 0; wi < cands.length; wi++) {
+      if (occCount >= target) break;
+
+      var w = cands[wi];
+      var backup = grid.map(function(row) { return row.slice(); });
+      var p = placeWord(grid, w, size, d);
+      if (!p) continue;
+
+      // Count new cells this word would occupy
+      var newOcc = 0;
+      var hasUnique = false;
+      for (var pi = 0; pi < p.length; pi++) {
+        var key = p[pi][0] + "," + p[pi][1];
+        if (!cellWordCount[key]) newOcc++;
+      }
+
+      var emptyAfter = total - (occCount + newOcc);
+
+      // Reject if this would leave fewer empty cells than mystery needs
+      if (emptyAfter < mystLen) {
+        for (var r = 0; r < size; r++)
+          for (var c = 0; c < size; c++)
+            grid[r][c] = backup[r][c];
+        continue;
+      }
+
+      // Check: does this word have at least 1 cell not used by any other word?
+      // (cells where cellWordCount is 0 = unique to this word)
+      for (var pi = 0; pi < p.length; pi++) {
+        var key = p[pi][0] + "," + p[pi][1];
+        if (!cellWordCount[key]) { hasUnique = true; break; }
+      }
+
+      if (!hasUnique) {
+        // This word is entirely covered by already-placed words → skip it
+        for (var r = 0; r < size; r++)
+          for (var c = 0; c < size; c++)
+            grid[r][c] = backup[r][c];
+        continue;
+      }
+
+      // Accept this word
+      placed.push(w);
+      wpos[w] = p;
+      for (var pi = 0; pi < p.length; pi++) {
+        var key = p[pi][0] + "," + p[pi][1];
+        if (!cellWordCount[key]) { occCount++; }
+        cellWordCount[key] = (cellWordCount[key] || 0) + 1;
+      }
+
+      // Perfect match
+      if (emptyAfter === mystLen) break;
+    }
+
+    // Count actual empty cells
+    var emptyCells = [];
+    for (var r = 0; r < size; r++)
+      for (var c = 0; c < size; c++)
+        if (grid[r][c] === null) emptyCells.push([r, c]);
+
+    // SUCCESS: exactly mystLen empty cells and enough words placed
+    if (emptyCells.length === mystLen && placed.length >= 5) {
+      // Sort empty cells in reading order (top→bottom, left→right)
+      emptyCells.sort(function(a, b) { return a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]; });
+      var mpos = [];
+      for (var i = 0; i < mystLen; i++) {
+        grid[emptyCells[i][0]][emptyCells[i][1]] = mystObj.mot[i];
+        mpos.push(emptyCells[i]);
+      }
+      return {grid: grid, placed: placed, wpos: wpos, myst: mystObj.mot, mystDef: mystObj.definition, mpos: mpos, size: size, found: []};
+    }
+
+    // CLOSE ENOUGH: only a few cells off — retry with different shuffle
+    // (with 1000+ words available, most attempts should succeed)
+  }
+
+  // Absolute fallback — fill remaining empty cells with random letters
+  // (should essentially never happen with 1000+ word dictionaries)
+  var grid = [];
+  for (var r = 0; r < size; r++) {
+    grid[r] = [];
+    for (var c = 0; c < size; c++) grid[r][c] = null;
+  }
+  var placed = [], wpos = {}, cellWordCount = {}, occCount = 0;
+  var cands = shuffle(words.filter(function(w) { return w.length <= size; }).slice());
+  for (var wi = 0; wi < cands.length; wi++) {
+    var p = placeWord(grid, cands[wi], size, dirs(diff));
+    if (!p) continue;
+    var newOcc = 0, hasUnique = false;
+    for (var pi = 0; pi < p.length; pi++) {
+      var key = p[pi][0]+","+p[pi][1];
+      if (!cellWordCount[key]) { newOcc++; hasUnique = true; }
+    }
+    if (!hasUnique) continue;
+    placed.push(cands[wi]); wpos[cands[wi]] = p;
+    for (var pi = 0; pi < p.length; pi++) {
+      var key = p[pi][0]+","+p[pi][1];
+      if (!cellWordCount[key]) occCount++;
+      cellWordCount[key] = (cellWordCount[key]||0)+1;
+    }
+  }
+  var emptyCells = [];
+  for (var r = 0; r < size; r++)
+    for (var c = 0; c < size; c++)
+      if (grid[r][c] === null) emptyCells.push([r, c]);
+  emptyCells.sort(function(a,b){return a[0]!==b[0]?a[0]-b[0]:a[1]-b[1];});
+  var mpos = [];
+  for (var i = 0; i < emptyCells.length; i++) {
+    if (i < mystLen) { grid[emptyCells[i][0]][emptyCells[i][1]] = mystObj.mot[i]; mpos.push(emptyCells[i]); }
+    else { grid[emptyCells[i][0]][emptyCells[i][1]] = randLetter(); }
+  }
+  return {grid: grid, placed: placed, wpos: wpos, myst: mystObj.mot, mystDef: mystObj.definition, mpos: mpos, size: size, found: []};
+}
+
+// ===================== RENDU =====================
+function render(gs) {
+  var g = document.getElementById("grid");
+  g.innerHTML = "";
+  g.style.gridTemplateColumns = "repeat(" + gs.size + ", 1fr)";
+  for (var r = 0; r < gs.size; r++) {
+    for (var c = 0; c < gs.size; c++) {
+      var el = document.createElement("div");
+      el.className = "grid-cell";
+      el.textContent = gs.grid[r][c];
+      el.dataset.row = r;
+      el.dataset.col = c;
+      el.addEventListener("click", onCell);
+      g.appendChild(el);
+    }
+  }
+  var wl = document.getElementById("word-list");
+  wl.innerHTML = "";
+  var sortedPlaced = gs.placed.slice().sort();
+  for (var i = 0; i < sortedPlaced.length; i++) {
+    var tag = document.createElement("span");
+    tag.className = "word-tag";
+    tag.textContent = sortedPlaced[i];
+    tag.id = "wt-" + sortedPlaced[i];
+    wl.appendChild(tag);
+  }
+  document.getElementById("stat-found").textContent = "0 / " + gs.placed.length;
+  document.getElementById("progress-fill").style.width = "0%";
+  document.getElementById("mystery-panel").style.display = "none";
+}
+
+// ===================== SELECTION =====================
+function cellsBetween(r1, c1, r2, c2) {
+  if (r1 === r2 && c1 === c2) return [[r1, c1]];
+  var dr = Math.sign(r2 - r1), dc = Math.sign(c2 - c1);
+  var lr = Math.abs(r2 - r1), lc = Math.abs(c2 - c1);
+  if (r1 !== r2 && c1 !== c2 && lr !== lc) return null;
+  var len = Math.max(lr, lc), cells = [];
+  for (var i = 0; i <= len; i++) cells.push([r1 + dr * i, c1 + dc * i]);
+  return cells;
+}
+
+function onCell(e) {
+  if (!GS) return;
+  var r = +e.target.dataset.row, c = +e.target.dataset.col;
+
+  if (!sel.active) {
+    sel = {active: true, r1: r, c1: c};
+    e.target.classList.add("selecting");
+  } else {
+    sel.active = false;
+    var allSel = document.querySelectorAll(".selecting");
+    for (var i = 0; i < allSel.length; i++) allSel[i].classList.remove("selecting");
+
+    var cells = cellsBetween(sel.r1, sel.c1, r, c);
+    if (!cells) return;
+
+    var word = cells.map(function(p) { return GS.grid[p[0]][p[1]]; }).join("");
+    var rev = word.split("").reverse().join("");
+
+    for (var wi = 0; wi < GS.placed.length; wi++) {
+      var w = GS.placed[wi];
+      if (GS.found.indexOf(w) >= 0) continue;
+      if (word !== w && rev !== w) continue;
+      var p = GS.wpos[w];
+      if (p.length !== cells.length) continue;
+      var fwd = true, bwd = true;
+      for (var i = 0; i < p.length; i++) {
+        if (p[i][0] !== cells[i][0] || p[i][1] !== cells[i][1]) fwd = false;
+        if (p[i][0] !== cells[cells.length - 1 - i][0] || p[i][1] !== cells[cells.length - 1 - i][1]) bwd = false;
+      }
+      if (!fwd && !bwd) continue;
+
+      // Found!
+      GS.found.push(w);
+      for (var ci = 0; ci < cells.length; ci++) {
+        var cel = document.querySelector('.grid-cell[data-row="' + cells[ci][0] + '"][data-col="' + cells[ci][1] + '"]');
+        if (cel) cel.classList.add("found");
+      }
+      var tag = document.getElementById("wt-" + w);
+      if (tag) tag.classList.add("found");
+      document.getElementById("stat-found").textContent = GS.found.length + " / " + GS.placed.length;
+      document.getElementById("progress-fill").style.width = (GS.found.length / GS.placed.length * 100) + "%";
+      if (GS.found.length === GS.placed.length) allFound();
+      break;
+    }
+  }
+}
+
+// ===================== TOUS TROUVES =====================
+function allFound() {
+  // Highlight mystery cells in grid
+  for (var i = 0; i < GS.mpos.length; i++) {
+    var el = document.querySelector('.grid-cell[data-row="' + GS.mpos[i][0] + '"][data-col="' + GS.mpos[i][1] + '"]');
+    if (el && !el.classList.contains("found")) el.classList.add("mystery-reveal");
+  }
+
+  // Show mystery panel - letters HIDDEN as "?"
+  document.getElementById("mystery-panel").style.display = "block";
+  document.getElementById("mystery-definition").textContent = GS.mystDef;
+  var ml = document.getElementById("mystery-letters");
+  ml.innerHTML = "";
+  for (var i = 0; i < GS.myst.length; i++) {
+    var b = document.createElement("div");
+    b.className = "mystery-letter-box";
+    b.textContent = "?";
+    ml.appendChild(b);
+  }
+  document.getElementById("mystery-input").focus();
+}
+
+// ===================== CHECK MYSTERE =====================
+function checkMystery() {
+  var val = document.getElementById("mystery-input").value.trim().toUpperCase();
+  var lang = document.getElementById("lang").value;
+  var t = T[lang];
+
+  if (val === GS.myst) {
+    clearInterval(timer);
+    // Reveal letters
+    var boxes = document.querySelectorAll("#mystery-letters .mystery-letter-box");
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].textContent = GS.myst[i];
+      boxes[i].classList.add("revealed");
+    }
+    setTimeout(function() {
+      document.getElementById("win-title").textContent = t.winTitle;
+      document.getElementById("win-text").textContent = t.winText;
+      document.getElementById("win-mystery-word").textContent = GS.myst;
+      document.getElementById("win-time-text").textContent = t.winTime + elapsed();
+      document.getElementById("win-overlay").classList.add("active");
+    }, 800);
+  } else {
+    var inp = document.getElementById("mystery-input");
+    inp.style.borderColor = "var(--accent-tertiary)";
+    inp.value = "";
+    inp.placeholder = t.wrong;
+    setTimeout(function() {
+      inp.style.borderColor = "rgba(192,57,43,0.15)";
+      inp.placeholder = t.mysteryPlaceholder;
+    }, 2000);
+  }
+}
+
+// ===================== TIMER =====================
+function elapsed() {
+  if (!t0) return "00:00";
+  var s = Math.floor((Date.now() - t0) / 1000);
+  return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+}
+
+function startTimer() {
+  if (timer) clearInterval(timer);
+  t0 = Date.now();
+  timer = setInterval(function() {
+    document.getElementById("stat-time").textContent = elapsed();
+  }, 1000);
+}
+
+// ===================== LABELS =====================
+function setLabels(lang) {
+  var t = T[lang];
+  document.getElementById("main-title").textContent = t.title;
+  document.getElementById("subtitle").textContent = t.subtitle;
+  document.getElementById("btn-generate").textContent = t.generate;
+  document.getElementById("stats-title").textContent = t.progress;
+  document.getElementById("found-label").textContent = t.found;
+  document.getElementById("time-label").textContent = t.time;
+  document.getElementById("wordlist-title").textContent = t.wordsToFind;
+  document.getElementById("mystery-title").textContent = t.mystery;
+  document.getElementById("mystery-input").placeholder = t.mysteryPlaceholder;
+  document.getElementById("btn-replay").textContent = t.replay;
+  document.getElementById("footer-text").textContent = t.footer;
+  document.getElementById("label-lang").textContent = t.lang;
+  document.getElementById("label-size").textContent = t.size;
+  document.getElementById("label-diff").textContent = t.difficulty;
+  var ds = document.getElementById("difficulty");
+  ds.options[0].text = t.facile;
+  ds.options[1].text = t.moyen;
+  ds.options[2].text = t.difficile;
+}
+
+// ===================== START =====================
+function startGame() {
+  var lang = document.getElementById("lang").value;
+  var size = +document.getElementById("grid-size").value;
+  var diff = document.getElementById("difficulty").value;
+  var dict = DICT[lang][diff];
+  var myst = dict.mysteres[Math.floor(Math.random() * dict.mysteres.length)];
+
+  GS = makeGrid(size, dict.mots, myst, diff);
+  render(GS);
+  startTimer();
+
+  document.getElementById("instructions").innerHTML = T[lang].instructions;
+  document.getElementById("instructions").classList.add("active");
+  document.getElementById("game-area").classList.add("active");
+  document.getElementById("win-overlay").classList.remove("active");
+  sel = {active: false, r1: null, c1: null};
+}
+
+// ===================== EVENTS =====================
+document.getElementById("btn-generate").addEventListener("click", startGame);
+document.getElementById("btn-replay").addEventListener("click", function() {
+  document.getElementById("win-overlay").classList.remove("active");
+  startGame();
+});
+document.getElementById("btn-check-mystery").addEventListener("click", checkMystery);
+document.getElementById("mystery-input").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") checkMystery();
+});
+document.getElementById("lang").addEventListener("change", function(e) {
+  setLabels(e.target.value);
+});
+
+setLabels("en");
+</script>
+</body>
+</html>
