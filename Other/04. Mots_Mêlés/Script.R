@@ -691,5 +691,5 @@ template <- paste(template, collapse = "\n")
 html_final <- sub("%%DICT_JSON%%", dict_json, template, fixed = TRUE)
 
 # Write final HTML file
-output_file <- here("mots_meles.html")
+output_file <- here("output","mots_meles.html")
 writeLines(html_final, output_file, useBytes = TRUE)
