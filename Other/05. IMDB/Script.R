@@ -10,7 +10,7 @@ library(data.table)
 library(here)
 library(ggplot2)
 library(ggiraph)
-library(ggdist)       
+library(ggdist)
 library(htmltools)
 library(scales)
 library(glue)
@@ -104,7 +104,7 @@ cat("Season-level ratings computed for",
 
 
 
-## Aggregated trend (MEAN) ----
+## Aggregated trend (mean) ----
 
 trend <- episodes_per_season[, .(
   average  = round(mean(nb_episodes), 1),
@@ -118,7 +118,7 @@ trend <- episodes_per_season[, .(
 
 # Custom theme : Ghost blog style ----
 
-bg_color      <- "#F5F0E8"
+bg_color      <- "#f1f1f1"
 text_color    <- "#2C2C2A"
 text_muted    <- "#73726C"
 dry_sage      <- "#c9cba3"    
@@ -126,7 +126,7 @@ soft_peach    <- "#ffe1a8"
 vibrant_coral <- "#e26d5c"    
 wine_plum     <- "#723d46"    
 dark_slate    <- "#373f51"    
-grid_color    <- "#E2DCD0"
+grid_color    <- "#E0E0E0"
 card_bg       <- "#FFFFFF"
 
 
@@ -277,96 +277,55 @@ p2 <- ggplot(episodes_per_season, aes(x = jitter_x, y = jitter_y)) +
 
 
 
-# Plot 3 : Raincloud plot (density + boxplot + points) ----
+# Plot 3 : Half-eye + boxplot ----
 
 series_duration <- series[!is.na(runtimeMinutes) & runtimeMinutes >= 10 & runtimeMinutes <= 120]
 
 series_duration[, period := fcase(
-  startYear <= 2005, "2000 – 2005",
-  startYear <= 2010, "2006 – 2010",
-  startYear <= 2015, "2011 – 2015",
-  startYear <= 2020, "2016 – 2020",
-  default = "2021 – 2024"
+  startYear <= 2008, "2000 – 2008",
+  startYear <= 2017, "2009 – 2017",
+  default = "2018 – 2024"
 )]
 
-series_duration[, period := factor(period, levels = c("2021 – 2024", "2016 – 2020", 
-                                                      "2011 – 2015", "2006 – 2010",
-                                                      "2000 – 2005"))]
-
-tooltip_duration <- glue_data(series_duration,
-                              "<b>{primaryTitle}</b><br>",
-                              "Runtime: {runtimeMinutes} min<br>",
-                              "Rating: {averageRating}/10<br>",
-                              "Year: {startYear}<br>",
-                              "Genre: {genres}"
-)
+series_duration[, period := factor(period, levels = c("2018 – 2024", "2009 – 2017", 
+                                                      "2000 – 2008"))]
 
 period_colors <- c(
-  "2000 – 2005" = "#c9cba3",
-  "2006 – 2010" = "#ffe1a8",
-  "2011 – 2015" = "#e26d5c",
-  "2016 – 2020" = "#723d46",
-  "2021 – 2024" = "#373f51"
+  "2000 – 2008" = "#c9cba3",
+  "2009 – 2017" = "#e26d5c",
+  "2018 – 2024" = "#373f51"
 )
 
-# Darker colors for density outline
-period_colors_dark <- c(
-  "2000 – 2005" = "#8a8c6e",
-  "2006 – 2010" = "#c4a050",
-  "2011 – 2015" = "#b8453a",
-  "2016 – 2020" = "#4e2a30",
-  "2021 – 2024" = "#232a36"
-)
-
-# Compute mean per period
-avg_duration <- series_duration[, .(avg = mean(runtimeMinutes)), by = period]
-
-# Raincloud = density above + boxplot middle + points below
-p3 <- ggplot(series_duration, aes(x = runtimeMinutes, y = period, fill = period)) +
-  # Half-density (above) — uniform dark outline
+p3 <- ggplot(series_duration, aes(x = period, y = runtimeMinutes)) +
+  # Density (half-eye above the line)
   stat_halfeye(
-    adjust = 0.8,
-    width = 0.35,
-    .width = 0,
-    justification = -0.1,
-    point_colour = NA,
-    alpha = 0.35,
-    slab_linewidth = 1,
-    slab_color = "#383332"
-  ) +
-  # Triangle marker for the mean (at the base of the density)
-  geom_point(
-    data = avg_duration,
-    aes(x = avg, y = as.numeric(period) - 0.03),
-    shape = 24, size = 3, fill = "#383332", color = "#383332",
-    inherit.aes = FALSE
-  ) +
-  # Boxplot (middle) — dark outline + visible median
-  geom_boxplot(
-    color = "#383332",
-    width = 0.1,
-    outlier.shape = NA,
+    aes(fill = period),
     alpha = 0.3,
-    linewidth = 0.6
+    adjust = 0.8,
+    .width = 0,
+    point_colour = NA
   ) +
-  # Interactive points (below)
-  geom_point_interactive(
-    aes(tooltip = tooltip_duration,
-        data_id = primaryTitle,
-        fill = period),
-    position = position_jitter(height = 0.15, width = 0, seed = 42),
-    size = 1.5, alpha = 0.7, shape = 21, color = "black", stroke = 0.3
+  # Boxplot (below the density)
+  geom_boxplot(
+    aes(fill = period),
+    width = 0.12,
+    outlier.shape = NA,
+    alpha = 0.6,
+    color = "#383332",
+    linewidth = 0.5
   ) +
   scale_fill_manual(values = period_colors) +
-  scale_x_continuous(breaks = seq(10, 120, 10),
+  scale_y_continuous(breaks = seq(10, 120, 10),
                      labels = function(x) paste0(x, " min")) +
-  scale_y_discrete(expand = expansion(mult = c(0.05, 0.35))) +
+  coord_flip(ylim = c(10, 90)) +
+  scale_x_discrete(expand = expansion(mult = c(0.15, 0.25))) +
+  guides(fill = "none") +
   labs(
     title    = "Longer episodes to compensate?",
-    subtitle = "Episode runtime distribution by period — density, boxplot, and individual data points",
+    subtitle = "Episode runtime distribution by period — density and boxplot",
     x = NULL,
     y = NULL,
-    caption  = "\u25B2 = mean runtime per period"
+    caption  = "Vertical line = median"
   ) +
   theme_series() +
   theme(axis.text.y = element_text(color = text_color, size = 12))
@@ -398,9 +357,8 @@ g2 <- girafe(ggobj = p2, width_svg = 10, height_svg = 7.5,
                opts_toolbar(saveaspng = FALSE)
              ))
 
-g3 <- girafe(ggobj = p3, width_svg = 10, height_svg = 12,
+g3 <- girafe(ggobj = p3, width_svg = 10, height_svg = 6,
              options = list(
-               opts_hover(css = "opacity:1;r:4px;"),
                opts_tooltip(css = tooltip_css),
                opts_toolbar(saveaspng = FALSE)
              ))
@@ -427,23 +385,56 @@ page <- htmltools::tagList(
     tags$style(HTML(glue("
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
       
-      body {{
+      *, *::before, *::after {{
+        box-sizing: border-box;
+      }}
+      
+      html, body {{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
         background-color: {bg_color};
         color: {text_color};
         font-family: 'Inter', system-ui, sans-serif;
-        margin: 0;
-        padding: 0;
       }}
       
-      .container {{
-        max-width: 960px;
-        margin: 0 auto;
+      .scroll-container {{
+        height: 100vh;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }}
+      .scroll-container::-webkit-scrollbar {{
+        display: none;
+      }}
+      
+      .scroll-section {{
+        height: 100vh;
+        scroll-snap-align: start;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 40px 20px;
+        position: relative;
+      }}
+      
+      .section-inner {{
+        max-width: 960px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }}
+      .section-inner::-webkit-scrollbar {{
+        display: none;
       }}
       
       .hero {{
         text-align: center;
-        margin-bottom: 50px;
       }}
       
       .hero h1 {{
@@ -464,26 +455,6 @@ page <- htmltools::tagList(
         max-width: 650px;
         margin: 0 auto;
         line-height: 1.5;
-      }}
-      
-      .section {{
-        margin-bottom: 60px;
-      }}
-      
-      .section .intro {{
-        font-size: 1rem;
-        color: {text_muted};
-        line-height: 1.7;
-        max-width: 100%;
-        margin-bottom: 20px;
-      }}
-      
-      .section .intro strong {{
-        color: {text_color};
-      }}
-      
-      .chart-container {{
-        margin: 20px 0;
       }}
       
       .key-number {{
@@ -516,17 +487,79 @@ page <- htmltools::tagList(
         margin: 30px 0;
       }}
       
-      .separator {{
-        height: 1px;
+      .scroll-hint {{
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        color: {text_muted};
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        animation: pulse-down 2s ease-in-out infinite;
+      }}
+      .scroll-hint svg {{
+        width: 20px;
+        height: 20px;
+        stroke: {text_muted};
+      }}
+      @keyframes pulse-down {{
+        0%, 100% {{ opacity: 0.4; transform: translateX(-50%) translateY(0); }}
+        50% {{ opacity: 1; transform: translateX(-50%) translateY(6px); }}
+      }}
+      
+      .nav-dots {{
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 100;
+      }}
+      .nav-dot {{
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
         background: {grid_color};
-        margin: 40px 0;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.3s;
+        padding: 0;
+      }}
+      .nav-dot:hover {{
+        background: {text_muted};
+      }}
+      .nav-dot.active {{
+        background: {vibrant_coral};
+        transform: scale(1.3);
+      }}
+      
+      .section .intro {{
+        font-size: 1rem;
+        color: {text_muted};
+        line-height: 1.7;
+        max-width: 100%;
+        margin-bottom: 15px;
+      }}
+      
+      .section .intro strong {{
+        color: {text_color};
+      }}
+      
+      .chart-container {{
+        margin: 10px 0;
       }}
       
       .source {{
         text-align: center;
         font-size: 0.8rem;
         color: {text_muted};
-        margin-top: 40px;
+        margin-top: 20px;
       }}
       
       .source a {{
@@ -534,7 +567,6 @@ page <- htmltools::tagList(
         text-decoration: none;
       }}
       
-      /* Search box for chart 2 — positioned at legend level */
       .plot2-wrapper {{
         position: relative;
       }}
@@ -581,105 +613,149 @@ page <- htmltools::tagList(
   ),
   
   tags$body(
-    tags$div(class = "container",
+    # Navigation dots (fixed)
+    tags$div(class = "nav-dots",
+             tags$button(class = "nav-dot active", onclick = "scrollToSection(0)"),
+             tags$button(class = "nav-dot", onclick = "scrollToSection(1)"),
+             tags$button(class = "nav-dot", onclick = "scrollToSection(2)"),
+             tags$button(class = "nav-dot", onclick = "scrollToSection(3)")
+    ),
+    
+    tags$div(class = "scroll-container", id = "scroll-container",
              
-             # Hero 
-             tags$div(class = "hero",
-                      tags$h1(HTML("Are TV Series Getting <span>Shorter</span>?")),
-                      tags$p(class = "subtitle",
-                             "Analyzing the top 20 highest-rated series each year on IMDb (2000-2024). ",
-                             "How streaming transformed the TV series format."
-                      )
-             ),
-             
-             # Key numbers 
-             tags$div(class = "key-numbers",
-                      tags$div(class = "key-number",
-                               tags$span(class = "value", 
-                                         paste0(trend[startYear == 2000, average], " \u2192 ", 
-                                                trend[startYear == 2024, average])),
-                               tags$span(class = "label", "episodes/season (average)")
-                      ),
-                      tags$div(class = "key-number",
-                               tags$span(class = "value", paste0("\u00F7 ", round(
-                                 trend[startYear == 2000, average] / trend[startYear == 2024, average], 1))),
-                               tags$span(class = "label", "in 25 years")
-                      ),
-                      tags$div(class = "key-number",
-                               tags$span(class = "value", nrow(series)),
-                               tags$span(class = "label", "series analyzed")
-                      ),
-                      tags$div(class = "key-number",
-                               tags$span(class = "value", "Top 20/year"),
-                               tags$span(class = "label", "by IMDb rating")
-                      )
-             ),
-             
-             tags$div(class = "separator"),
-             
-             # Section 1 
-             tags$div(class = "section",
-                      tags$p(class = "intro", HTML(paste0(
-                        "In 2000, a TV season averaged <strong>",
-                        trend[startYear == 2000, average],
-                        " episodes</strong>. By 2024, that number had dropped to <strong>",
-                        trend[startYear == 2024, average],
-                        " episodes</strong>. ",
-                        "This shift accelerated with the rise of streaming platforms, ",
-                        "which favor shorter, more focused seasons. ",
-                        "Viewers, overwhelmed by choice and short on time, ",
-                        "seem to embrace this format too: the highest-rated series ",
-                        "are increasingly shorter."
-                      ))),
-                      tags$div(class = "chart-container", g1)
-             ),
-             
-             tags$div(class = "separator"),
-             
-             # Section 2 (with search box)
-             tags$div(class = "section",
-                      tags$p(class = "intro", HTML(
-                        "Behind the trend, each dot represents one season of one series. ",
-                        "You can see the <strong>\"cloud\" compressing downward</strong> over the years: ",
-                        "where the 2000s mixed seasons of 6 to 24 episodes, ",
-                        "the 2020s cluster mostly between 4 and 10. ",
-                        "Hover over a dot to highlight series within the same rating bracket, ",
-                        "or use the search bar to find a specific series."
-                      )),
-                      tags$div(class = "plot2-wrapper",
-                               tags$div(class = "search-container",
-                                        tags$label(`for` = "seriesSearch", "Search:"),
-                                        tags$input(type = "text", id = "seriesSearch", 
-                                                   placeholder = "e.g. Breaking Bad...")
+             # Section 0 : Hero 
+             tags$div(class = "scroll-section", `data-section` = "0",
+                      tags$div(class = "section-inner",
+                               tags$div(class = "hero",
+                                        tags$h1(HTML("Are TV series getting <span>shorter</span>?")),
+                                        tags$p(class = "subtitle",
+                                               "Analyzing the top 20 highest-rated series each year on IMDb (2000-2024). ",
+                                               "How streaming transformed the TV series format."
+                                        )
                                ),
-                               tags$div(id = "searchResults", class = "search-results"),
-                               tags$div(class = "chart-container", id = "plot2-container", g2)
+                               tags$div(class = "key-numbers",
+                                        tags$div(class = "key-number",
+                                                 tags$span(class = "value", 
+                                                           paste0(trend[startYear == 2000, average], " \u2192 ", 
+                                                                  trend[startYear == 2024, average])),
+                                                 tags$span(class = "label", "episodes/season (average)")
+                                        ),
+                                        tags$div(class = "key-number",
+                                                 tags$span(class = "value", paste0("\u00F7 ", round(
+                                                   trend[startYear == 2000, average] / trend[startYear == 2024, average], 1))),
+                                                 tags$span(class = "label", "in 25 years")
+                                        ),
+                                        tags$div(class = "key-number",
+                                                 tags$span(class = "value", nrow(series)),
+                                                 tags$span(class = "label", "series analyzed")
+                                        ),
+                                        tags$div(class = "key-number",
+                                                 tags$span(class = "value", "Top 20/year"),
+                                                 tags$span(class = "label", "by IMDb rating")
+                                        )
+                               )
+                      ),
+                      tags$div(class = "scroll-hint",
+                               HTML('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>'),
+                               tags$span("scroll")
                       )
              ),
              
-             tags$div(class = "separator"),
-             
-             # Section 3
-             tags$div(class = "section",
-                      tags$p(class = "intro", HTML(
-                        "Fewer episodes, but <strong>longer ones?</strong> ",
-                        "The runtime distribution reveals a clear shift: the 22-minute sitcom format, ",
-                        "king of the 2000s, is gradually losing ground ",
-                        "to 45-to-60-minute drama formats. Recent series compensate ",
-                        "for fewer episodes with denser, longer installments."
-                      )),
-                      tags$div(class = "chart-container", g3)
+             # Section 1 : Plot 1 
+             tags$div(class = "scroll-section", `data-section` = "1",
+                      tags$div(class = "section-inner section",
+                               tags$p(class = "intro", HTML(paste0(
+                                 "In 2000, a TV season averaged <strong>",
+                                 trend[startYear == 2000, average],
+                                 " episodes</strong>. By 2024, that number had dropped to <strong>",
+                                 trend[startYear == 2024, average],
+                                 " episodes</strong>. ",
+                                 "This shift accelerated with the rise of streaming platforms, ",
+                                 "which favor shorter, more focused seasons. ",
+                                 "Viewers, overwhelmed by choice and short on time, ",
+                                 "seem to embrace this format too: the highest-rated series ",
+                                 "are increasingly shorter."
+                               ))),
+                               tags$div(class = "chart-container", g1)
+                      )
              ),
              
-             # Source 
-             tags$div(class = "separator"),
-             tags$div(class = "source",
-                      HTML("Data Visualization by Maxime Deniaux | Data: IMDb Non-Commercial Datasets (March 2026) — excludes talk shows, reality TV & news")
+             # Section 2 : Plot 2 
+             tags$div(class = "scroll-section", `data-section` = "2",
+                      tags$div(class = "section-inner section",
+                               tags$p(class = "intro", HTML(
+                                 "Behind the trend, each dot represents one season of one series. ",
+                                 "You can see the <strong>\"cloud\" compressing downward</strong> over the years: ",
+                                 "where the 2000s mixed seasons of 6 to 24 episodes, ",
+                                 "the 2020s cluster mostly between 4 and 10. ",
+                                 "Hover over a dot to highlight series within the same rating bracket, ",
+                                 "or use the search bar to find a specific series."
+                               )),
+                               tags$div(class = "plot2-wrapper",
+                                        tags$div(class = "search-container",
+                                                 tags$label(`for` = "seriesSearch", "Search:"),
+                                                 tags$input(type = "text", id = "seriesSearch", 
+                                                            placeholder = "e.g. Breaking Bad...")
+                                        ),
+                                        tags$div(id = "searchResults", class = "search-results"),
+                                        tags$div(class = "chart-container", id = "plot2-container", g2)
+                               )
+                      )
+             ),
+             
+             # Section 3 : Plot 3 + Source 
+             tags$div(class = "scroll-section", `data-section` = "3",
+                      tags$div(class = "section-inner section",
+                               tags$p(class = "intro", HTML(
+                                 "Fewer episodes, but <strong>longer ones?</strong> ",
+                                 "The runtime distribution reveals a clear shift: the 22-minute sitcom format, ",
+                                 "king of the 2000s, is gradually losing ground ",
+                                 "to 45-to-60-minute drama formats. Recent series compensate ",
+                                 "for fewer episodes with denser, longer installments."
+                               )),
+                               tags$div(class = "chart-container", g3),
+                               tags$div(class = "source",
+                                        HTML("Data visualization by Maxime Deniaux | Data: IMDb Non-Commercial Datasets (March 2026) — excludes talk shows, reality TV & news")
+                               )
+                      )
              )
     ),
     
-    # JavaScript for search in chart 2 
+    # JavaScript: scrollytelling nav + search 
     tags$script(HTML(glue("
+      // --- Navigation dots ---
+      function scrollToSection(index) {{
+        const sections = document.querySelectorAll('.scroll-section');
+        if (sections[index]) {{
+          sections[index].scrollIntoView({{ behavior: 'smooth' }});
+        }}
+      }}
+      
+      (function() {{
+        const container = document.getElementById('scroll-container');
+        const dots = document.querySelectorAll('.nav-dot');
+        const hint = document.querySelector('.scroll-hint');
+        
+        if (!container || dots.length === 0) return;
+        
+        const updateDots = function() {{
+          const scrollTop = container.scrollTop;
+          const sectionHeight = container.clientHeight;
+          const currentIndex = Math.round(scrollTop / sectionHeight);
+          
+          dots.forEach(function(dot, i) {{
+            dot.classList.toggle('active', i === currentIndex);
+          }});
+          
+          if (hint) {{
+            hint.style.opacity = currentIndex > 0 ? '0' : '';
+          }}
+        }};
+        
+        container.addEventListener('scroll', updateDots);
+      }})();
+      
+      // Series search (chart 2) 
       const seriesData = {search_json};
       
       setTimeout(function() {{
